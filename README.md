@@ -1,6 +1,20 @@
 # Logging API
 
-This API is a very light weight logging system built on principles of simplicity and flexibility. Unlike Monolog, the industry standard in our days, it brings no tangible performance penalties and has near-zero learning curve just by keeping complexity to a minimum while offering you the ability to extend functionalities. The whole idea of logging is reduced to just three steps:
+Table of contents:
+
+- [About](#about)
+- [Configuration](#configuration)
+- [Logging](#logging)
+- [Installation](#installation)
+- [Unit Tests](#unit-tests)
+
+## About
+
+This API is a very light weight logging system built on principles of simplicity and flexibility. Unlike Monolog, the industry standard in our days, it brings no tangible performance penalties and has near-zero learning curve just by keeping complexity to a minimum while offering you the ability to extend functionalities. 
+
+![diagram](https://www.lucinda-framework.com/public/images/svg/logging-api.svg)
+
+The whole idea of logging is reduced to just three steps:
 
 - **[configuration](#configuration)**: setting up an XML file where one or more loggers are set for each development environment
 - **[logging](#logging)**: creating a [Lucinda\Logging\Wrapper](https://github.com/aherne/php-logging-api/blob/v3.0.0/src/Wrapper.php) instance based on above XML and using it to log
@@ -136,7 +150,6 @@ Logger returned is a [Lucinda\Logging\Logger](https://github.com/aherne/php-logg
 **NOTE**: because XML parsing is somewhat costly, it is recommended to save $object somewhere and reuse it throughout application lifecycle.
 
 Once you saved and stored $logger object obtained above, you are able to perform logging via [Lucinda\Logging\Logger](https://github.com/aherne/php-logging-api/blob/v3.0.0/src/Logger.php) methods:
-
 
 | Method | Arguments | Returns | Description |
 | --- | --- | --- | --- |
