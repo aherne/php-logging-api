@@ -7,7 +7,7 @@ use Lucinda\Logging\LogFormatter;
 /**
  * Logs messages/errors into syslog service.
  */
-class Logger extends \Lucinda\Logging\Logger
+final class Logger extends \Lucinda\Logging\Logger
 {
     private string $applicationName;
     private LogFormatter $formatter;

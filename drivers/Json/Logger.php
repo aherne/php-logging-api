@@ -7,7 +7,7 @@ use Lucinda\Logging\RequestInformation;
 /**
  * Logs messages/errors as newline-delimited JSON objects.
  */
-class Logger extends \Lucinda\Logging\Logger
+final class Logger extends \Lucinda\Logging\Logger
 {
     public const EXTENSION = "json";
 

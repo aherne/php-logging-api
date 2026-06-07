@@ -5,7 +5,7 @@ namespace Lucinda\Logging;
 /**
  * Encapsulates user request information
  */
-class RequestInformation
+final class RequestInformation
 {
     private ?string $uri = null;
     private ?string $ipAddress = null;

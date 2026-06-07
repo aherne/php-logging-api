@@ -5,7 +5,7 @@ namespace Lucinda\Logging;
 /**
  * Locates and instances loggers based on XML content.
  */
-class Wrapper
+final class Wrapper
 {
     /**
      * @var Logger[]

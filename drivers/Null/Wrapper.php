@@ -5,7 +5,7 @@ namespace Lucinda\Logging\Driver\Null;
 /**
  * Creates a logger that discards messages.
  */
-class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
+final class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
 {
     /**
      * Detects Logger instance based on XML tag supplied

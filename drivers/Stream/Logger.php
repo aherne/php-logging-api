@@ -8,7 +8,7 @@ use Lucinda\Logging\LogFormatter;
 /**
  * Logs messages/errors into stdout or stderr.
  */
-class Logger extends \Lucinda\Logging\Logger
+final class Logger extends \Lucinda\Logging\Logger
 {
     private string $stream;
     private LogFormatter $formatter;

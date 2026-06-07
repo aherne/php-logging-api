@@ -12,7 +12,7 @@ namespace Lucinda\Logging;
  * - %m: thrown exception message
  * - %u: uri in which message has occurred
  */
-class LogFormatter
+final class LogFormatter
 {
     private string $pattern;
     private RequestInformation $requestInformation;

@@ -5,6 +5,6 @@ namespace Lucinda\Logging;
 /**
  * Exception thrown when XML is misconfigured
  */
-class ConfigurationException extends \Exception
+final class ConfigurationException extends \Exception
 {
 }

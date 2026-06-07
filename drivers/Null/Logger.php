@@ -5,7 +5,7 @@ namespace Lucinda\Logging\Driver\Null;
 /**
  * Silently discards all log messages.
  */
-class Logger extends \Lucinda\Logging\Logger
+final class Logger extends \Lucinda\Logging\Logger
 {
     /**
      * Performs the act of logging.

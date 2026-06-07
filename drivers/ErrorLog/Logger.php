@@ -7,7 +7,7 @@ use Lucinda\Logging\LogFormatter;
 /**
  * Logs messages/errors through PHP's native error_log facility.
  */
-class Logger extends \Lucinda\Logging\Logger
+final class Logger extends \Lucinda\Logging\Logger
 {
     private LogFormatter $formatter;
 

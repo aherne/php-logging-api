@@ -8,7 +8,7 @@ use Lucinda\Logging\LogFormatter;
 /**
  * Creates a logger that writes to stdout or stderr.
  */
-class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
+final class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
 {
     /**
      * Detects Logger instance based on XML tag supplied

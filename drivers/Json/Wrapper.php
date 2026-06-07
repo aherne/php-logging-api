@@ -7,7 +7,7 @@ use Lucinda\Logging\ConfigurationException;
 /**
  * Creates a logger that writes newline-delimited JSON objects to disk.
  */
-class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
+final class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
 {
     /**
      * Detects Logger instance based on XML tag supplied

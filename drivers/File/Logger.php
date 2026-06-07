@@ -7,7 +7,7 @@ use Lucinda\Logging\LogFormatter;
 /**
  * Logs messages/errors into simple files.
  */
-class Logger extends \Lucinda\Logging\Logger
+final class Logger extends \Lucinda\Logging\Logger
 {
     public const EXTENSION = "log";
 

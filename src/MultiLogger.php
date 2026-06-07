@@ -5,7 +5,7 @@ namespace Lucinda\Logging;
 /**
  * Implements a logger that forwards internally to multiple loggers.
  */
-class MultiLogger extends Logger
+final class MultiLogger extends Logger
 {
     /**
      * @var Logger[]

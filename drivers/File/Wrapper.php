@@ -8,7 +8,7 @@ use Lucinda\Logging\LogFormatter;
 /**
  * Logs message into file on disk, whose location varies according to development environment.
  */
-class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
+final class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
 {
     /**
      * Detects Logger instance based on XML tag supplied

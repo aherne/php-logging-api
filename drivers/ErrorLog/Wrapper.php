@@ -8,7 +8,7 @@ use Lucinda\Logging\LogFormatter;
 /**
  * Creates a logger that delegates to PHP's native error_log facility.
  */
-class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
+final class Wrapper extends \Lucinda\Logging\AbstractLoggerWrapper
 {
     /**
      * Detects Logger instance based on XML tag supplied
