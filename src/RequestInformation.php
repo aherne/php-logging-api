@@ -7,9 +7,9 @@ namespace Lucinda\Logging;
  */
 class RequestInformation
 {
-    private ?string $uri;
-    private ?string $ipAddress;
-    private ?string $userAgent;
+    private ?string $uri = null;
+    private ?string $ipAddress = null;
+    private ?string $userAgent = null;
 
     /**
      * Sets relative URI (page) requested by client
@@ -62,7 +62,7 @@ class RequestInformation
     }
 
     /**
-     * Gets HTTP request method used by client in request
+     * Gets client's user agent
      *
      * @return ?string
      */

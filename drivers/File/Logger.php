@@ -38,6 +38,6 @@ class Logger extends \Lucinda\Logging\Logger
     protected function log(string|\Throwable $info, int $level): void
     {
         $fileName = $this->filePath.($this->rotationPattern ? "__".date($this->rotationPattern) : "").".".self::EXTENSION;
-        error_log($this->formatter->format($info, $level)."\n", 3, $fileName);
+        file_put_contents($fileName, $this->formatter->format($info, $level)."\n", FILE_APPEND | LOCK_EX);
     }
 }

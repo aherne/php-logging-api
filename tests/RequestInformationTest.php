@@ -3,7 +3,8 @@
 namespace Test\Lucinda\Logging;
 
 use Lucinda\Logging\RequestInformation;
-use Lucinda\UnitTest\Result;
+use Lucinda\UnitTest\Validator\Booleans;
+use Lucinda\UnitTest\Validator\Strings;
 
 class RequestInformationTest
 {
@@ -17,38 +18,44 @@ class RequestInformationTest
     public function setUri()
     {
         $this->requestInformation->setUri("test");
-        return new Result("tested via getUri() method");
+        return (new Strings($this->requestInformation->getUri()))->assertEquals("test");
     }
-
 
     public function setIpAddress()
     {
         $this->requestInformation->setIpAddress("127.0.0.1");
-        return new Result("tested via getIpAddress() method");
+        return (new Strings($this->requestInformation->getIpAddress()))->assertEquals("127.0.0.1");
     }
-
 
     public function setUserAgent()
     {
         $this->requestInformation->setUserAgent("chrome");
-        return new Result("tested via getUserAgent() method");
+        return (new Strings($this->requestInformation->getUserAgent()))->assertEquals("chrome");
     }
-
 
     public function getUri()
     {
-        return new Result($this->requestInformation->getUri()=="test");
+        return (new Strings($this->requestInformation->getUri()))->assertEquals("test");
     }
-
 
     public function getIpAddress()
     {
-        return new Result($this->requestInformation->getIpAddress()=="127.0.0.1");
+        return (new Strings($this->requestInformation->getIpAddress()))->assertEquals("127.0.0.1");
     }
-
 
     public function getUserAgent()
     {
-        return new Result($this->requestInformation->getUserAgent()=="chrome");
+        return (new Strings($this->requestInformation->getUserAgent()))->assertEquals("chrome");
+    }
+
+    public function defaults()
+    {
+        $requestInformation = new RequestInformation();
+
+        return [
+            (new Booleans($requestInformation->getUri() === null))->assertTrue("uri defaults to null"),
+            (new Booleans($requestInformation->getIpAddress() === null))->assertTrue("ip address defaults to null"),
+            (new Booleans($requestInformation->getUserAgent() === null))->assertTrue("user agent defaults to null")
+        ];
     }
 }

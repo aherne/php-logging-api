@@ -1,9 +1,9 @@
 <?php
 
-namespace Test\Lucinda\Logging\Driver\File;
+namespace Test\Lucinda\Logging\Driver\ErrorLog;
 
-use Lucinda\Logging\Driver\File\Logger;
-use Lucinda\Logging\Driver\File\Wrapper;
+use Lucinda\Logging\Driver\ErrorLog\Logger;
+use Lucinda\Logging\Driver\ErrorLog\Wrapper;
 use Lucinda\Logging\RequestInformation;
 use Lucinda\UnitTest\Validator\Objects;
 
@@ -11,7 +11,7 @@ class WrapperTest
 {
     public function getLogger()
     {
-        $xml = simplexml_load_string('<logger path="'.sys_get_temp_dir().'/lucinda_file_wrapper_test" format="%v %m"/>');
+        $xml = simplexml_load_string('<logger format="%v %m"/>');
         $wrapper = new Wrapper($xml, new RequestInformation());
 
         return (new Objects($wrapper->getLogger()))->assertInstanceOf(Logger::class);

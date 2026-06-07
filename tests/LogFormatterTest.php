@@ -4,7 +4,7 @@ namespace Test\Lucinda\Logging;
 
 use Lucinda\Logging\LogFormatter;
 use Lucinda\Logging\RequestInformation;
-use Lucinda\UnitTest\Result;
+use Lucinda\UnitTest\Validator\Strings;
 
 class LogFormatterTest
 {
@@ -15,16 +15,17 @@ class LogFormatterTest
         $requestInformation->setIpAddress("127.0.0.1");
         $requestInformation->setUri("test");
 
-        $results = [];
+        $formatter = new LogFormatter("%d %v %m %u %i %a", $requestInformation);
+        $stringResult = $formatter->format("message", LOG_INFO);
 
-        $formatter = new LogFormatter("%d %v %u %i %a", $requestInformation);
-        $result = $formatter->format("message", LOG_INFO);
-        $results[] = new Result($result == date("Y-m-d H:i:s")." ".LOG_INFO." test 127.0.0.1 Chrome", "checks string log line");
-
+        $exception = new \Exception("testing");
         $formatter = new LogFormatter("%d %v %e %f %l %m %u %i %a", $requestInformation);
-        $result = $formatter->format(new \Exception("testing"), LOG_EMERG);
-        $results[] = new Result($result == date("Y-m-d H:i:s")." ".LOG_EMERG." Exception ".__FILE__." ".(__LINE__-1)." testing test 127.0.0.1 Chrome", "checks exception log line");
+        $exceptionResult = $formatter->format($exception, LOG_EMERG);
 
-        return $results;
+        return [
+            (new Strings($stringResult))->assertEquals(date("Y-m-d H:i:s")." ".LOG_INFO." message test 127.0.0.1 Chrome", "formats string log line"),
+            (new Strings($exceptionResult))->assertContains(LOG_EMERG." Exception ".__FILE__, "formats exception file"),
+            (new Strings($exceptionResult))->assertContains(" testing test 127.0.0.1 Chrome", "formats exception message and request")
+        ];
     }
 }

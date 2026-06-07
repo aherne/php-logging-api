@@ -2,101 +2,107 @@
 
 namespace Test\Lucinda\Logging;
 
-use Lucinda\Logging\RequestInformation;
-use Lucinda\Logging\Wrapper;
-use Lucinda\UnitTest\Validator\Files;
+use Lucinda\Logging\Logger;
+use Lucinda\Logging\MultiLogger;
+use Lucinda\UnitTest\Validator\Arrays;
 
 class MultiLoggerTest
 {
-    private $logger;
+    private object $first;
+    private object $second;
+    private MultiLogger $logger;
 
     public function __construct()
     {
-        $requestInformation = new RequestInformation();
-        $requestInformation->setUserAgent("Chrome");
-        $requestInformation->setIpAddress("127.0.0.1");
-        $requestInformation->setUri("test");
+        $this->first = new class () extends Logger {
+            public array $records = [];
 
-        $wrapper = new Wrapper(simplexml_load_file("unit-tests.xml"), $requestInformation, "local");
-        $this->logger = $wrapper->getLogger();
+            protected function log(string|\Throwable $info, int $level): void
+            {
+                $this->records[] = [$level, $info instanceof \Throwable ? $info->getMessage() : $info];
+            }
+        };
+        $this->second = new class () extends Logger {
+            public array $records = [];
+
+            protected function log(string|\Throwable $info, int $level): void
+            {
+                $this->records[] = [$level, $info instanceof \Throwable ? $info->getMessage() : $info];
+            }
+        };
+        $this->logger = new MultiLogger([$this->first, $this->second]);
     }
 
+    public function delegates()
+    {
+        $this->logger->info("message");
+
+        return $this->assertRecords(LOG_INFO, "message");
+    }
     public function emergency()
     {
-        $throwable = new \Exception("error");
-        $this->logger->emergency($throwable);
-        return $this->checkErrorLogs(LOG_EMERG, $throwable);
+        $this->logger->emergency(new \Exception("emergency"));
+        return $this->assertRecords(LOG_EMERG, "emergency");
     }
-
+        
 
     public function alert()
     {
-        $throwable = new \Exception("error");
-        $this->logger->alert($throwable);
-        return $this->checkErrorLogs(LOG_ALERT, $throwable);
+        $this->logger->alert(new \Exception("alert"));
+        return $this->assertRecords(LOG_ALERT, "alert");
     }
-
+        
 
     public function critical()
     {
-        $throwable = new \Exception("error");
-        $this->logger->critical($throwable);
-        return $this->checkErrorLogs(LOG_CRIT, $throwable);
+        $this->logger->critical(new \Exception("critical"));
+        return $this->assertRecords(LOG_CRIT, "critical");
     }
-
+        
 
     public function error()
     {
-        $throwable = new \Exception("error");
-        $this->logger->error($throwable);
-        return $this->checkErrorLogs(LOG_ERR, $throwable);
+        $this->logger->error(new \Exception("error"));
+        return $this->assertRecords(LOG_ERR, "error");
     }
-
+        
 
     public function warning()
     {
-        $this->logger->warning("message");
-        return $this->checkStringLogs(LOG_WARNING, "message");
+        $this->logger->warning("warning");
+        return $this->assertRecords(LOG_WARNING, "warning");
     }
-
+        
 
     public function notice()
     {
-        $this->logger->notice("message");
-        return $this->checkStringLogs(LOG_NOTICE, "message");
+        $this->logger->notice("notice");
+        return $this->assertRecords(LOG_NOTICE, "notice");
     }
-
+        
 
     public function debug()
     {
-        $this->logger->debug("message");
-        return $this->checkStringLogs(LOG_DEBUG, "message");
+        $this->logger->debug("debug");
+        return $this->assertRecords(LOG_DEBUG, "debug");
     }
-
+        
 
     public function info()
     {
-        $this->logger->info("message");
-        return $this->checkStringLogs(LOG_INFO, "message");
+        $this->logger->info("info");
+        return $this->assertRecords(LOG_INFO, "info");
     }
 
-    private function checkStringLogs(int $logLevel, string $message): array
+    private function assertRecords(int $level, string $message): array
     {
-        $info = debug_backtrace(true)[0];
-        $result = [];
-        $result[] = (new Files("messages__".date("Y-m-d").".log"))->assertContains(date("Y-m-d H:i:s")." ".$logLevel." %e ".$info["file"]." ".($info["line"]-1)." ".$message." test 127.0.0.1 Chrome", "checks file logger");
-        $result[] = (new Files("/var/log/syslog"))->assertContains($logLevel." %e ".__FILE__." ".($info["line"]-1)." ".$message." test 127.0.0.1 Chrome", "checks syslogger");
-        return $result;
-    }
+        $expected = [[$level, $message]];
+        $first = array_slice($this->first->records, -1);
+        $second = array_slice($this->second->records, -1);
 
-    private function checkErrorLogs(int $logLevel, \Throwable $throwable): array
-    {
-        $info = debug_backtrace(true)[0];
-        $message = $throwable->getMessage();
-        $className = get_class($throwable);
-        $result = [];
-        $result[] = (new Files("messages__".date("Y-m-d").".log"))->assertContains(date("Y-m-d H:i:s")." ".$logLevel." ".$className." ".$info["file"]." ".($info["line"]-2)." ".$message." test 127.0.0.1 Chrome", "checks file logger");
-        $result[] = (new Files("/var/log/syslog"))->assertContains($logLevel." ".$className." ".__FILE__." ".($info["line"]-2)." ".$message." test 127.0.0.1 Chrome", "checks syslogger");
-        return $result;
+        return [
+            (new Arrays($first))->assertEquals($expected, "delegates to first logger"),
+            (new Arrays($second))->assertEquals($expected, "delegates to second logger")
+        ];
     }
 }
